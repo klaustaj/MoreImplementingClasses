@@ -2,8 +2,8 @@
 A   CapitalT   class and methods that use the Cross class.
 
 Authors: David Mutchler, Dave Fisher, Valerie Galluzzi, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Aaron Klaustermeier.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -135,11 +135,28 @@ class CapitalT(object):
           :type letter_thickness:   int
         """
         # --------------------------------------------------------------
-        # TODO: 3.
+        # DONE: 3.
         #   READ the above specification, including the Example.
         #   Implement this method
         #   Note: you will need to also implement attach_to before testing
         # --------------------------------------------------------------
+        ph1 = intersection_center.clone()
+        ph2 = intersection_center.clone()
+        pv1 = intersection_center.clone()
+        pv2 = intersection_center.clone()
+
+        ph1.x = ph1.x - width/2
+        ph2.x = ph2.x + width/2
+        pv1.x = pv1.x - letter_thickness/2
+        pv2.x = pv2.x + letter_thickness/2
+
+        ph1.y = ph1.y - letter_thickness/2
+        ph2.y = ph2.y + letter_thickness/2
+        pv1.y = pv1.y - letter_thickness/2
+        pv2.y = pv2.y + height - letter_thickness/2
+
+        self.h_rect = rg.Rectangle(ph1, ph2)
+        self.v_rect = rg.Rectangle(pv1, pv2)
 
     def attach_to(self, window):
         """
@@ -160,11 +177,13 @@ class CapitalT(object):
           :type window: rg.RoseWindow
         """
         # --------------------------------------------------------------
-        # TODO: 4.
+        # DONE: 4.
         #   READ the above specification, including the Example.
         #   Implement and test this method by looking at the console and
         #     the graphics window (compare it to simple_t.pdf)
         # --------------------------------------------------------------
+        self.v_rect.attach_to(window)
+        self.h_rect.attach_to(window)
 
     def set_colors(self, fill_color, outline_color):
         """
@@ -187,12 +206,16 @@ class CapitalT(object):
           :type outline_color: str
         """
         # --------------------------------------------------------------
-        # TODO: 5.
+        # DONE: 5.
         #   READ the above specification, including the Example.
         #   Implement and test this method by uncommenting the appropriate
         #     run_test method in main. Compare the graphics window to
         #     set_colors.pdf.
         # --------------------------------------------------------------
+        self.h_rect.fill_color = fill_color
+        self.v_rect.fill_color = fill_color
+        self.h_rect.outline_color = outline_color
+        self.v_rect.outline_color = outline_color
 
     def move_by(self, dx, dy):
         """
@@ -217,13 +240,15 @@ class CapitalT(object):
           :type dy: int
         """
         # --------------------------------------------------------------
-        # TODO: 6.
+        # DONE: 6.
         #   READ the above specification, including the Example.
         #   Implement and test this method by uncommenting the appropriate
         #     run_test method in main. Compare the graphics window to
         #     move_by.pdf. Note: the pdf shows the different locations
         #     that the T moves through, but there is only 1 T at any moment.
         # --------------------------------------------------------------
+        self.h_rect.move_by(dx, dy)
+        self.v_rect.move_by(dx, dy)
 
     def clone(self):
         """
@@ -245,12 +270,22 @@ class CapitalT(object):
           :rtype: CapitalT
         """
         # --------------------------------------------------------------
-        # TODO: 7.
+        # DONE: 7.
         #   READ the above specification, including the Example.
         #   Implement and test this method by uncommenting the appropriate
         #     run_test method in main. Compare the graphics window to
         #     clone.pdf.
         # --------------------------------------------------------------
+        intersection_center = self.h_rect.get_center()
+        width = self.h_rect.get_width()
+        height = self.v_rect.get_height()
+        letter_thickness = self.h_rect.get_height()
+
+        new_T = CapitalT(intersection_center, width, height, letter_thickness)
+
+        new_T.set_colors(self.h_rect.fill_color, self.v_rect.outline_color)
+
+        return new_T
 
 
 # ----------------------------------------------------------------------
